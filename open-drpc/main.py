@@ -4,6 +4,8 @@ from pypresence import Presence
 from pypresence.exceptions import DiscordNotFound
 from time import sleep
 import platform
+import pathlib
+import json
 
 if platform.system() != "Linux":
     print("Sorry, but the script only works on Linux")
@@ -24,6 +26,20 @@ def connect_rpc():
 
 connect_rpc()
 
+config_path = pathlib.Path("~/.config/open-drpc.json").expanduser()
+
+if not config_path.exists():
+    with config_path.open('w') as fp:
+        config = {'excluded': []}
+        json.dump(config, fp)
+else:
+    with config_path.open('r+') as fp:
+        try:
+            config = json.load(fp)
+            config['excluded'] = [str(i) for i in config['excluded']]
+        except json.JSONDecodeError:
+            config = {'excluded': []}
+            json.dump(config, fp)
 
 def game_data(app_id):
     response = requests.get(
@@ -38,7 +54,7 @@ def get_game():
         try:
             environ = proc.info["environ"]
             if environ is not None:
-                if "SteamAppId" in environ:
+                if "SteamAppId" in environ and environ["SteamAppId"] not in config['excluded']:
                     return game_data(environ["SteamAppId"])
         except (psutil.AccessDenied, psutil.NoSuchProcess, KeyError):
             continue

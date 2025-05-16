@@ -1,4 +1,4 @@
-# Open DRPC v1.1.0
+# Open DRPC v1.2.0
 
 [![pypresence](https://img.shields.io/badge/using-pypresence-00bb88.svg?style=for-the-badge&logo=discord&logoWidth=20)](https://github.com/qwertyquerty/pypresence)
 
@@ -16,3 +16,11 @@ Run the `install.sh`:
 ```bash
 run install.sh
 ```
+
+## Configure
+
+The configuration file is at `~/.config/open-drpc.json`
+
+### Excluded
+
+Add excluded app ids to `excluded` field
