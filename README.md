@@ -8,16 +8,22 @@ Python Script adding Discord RPC support to all Steam Games on Linux
 
 ## Installation
 
+First, clone the repo:
+
+```bash
+git clone https://github.com/mbutsk/open-drpc
+```
+
 > [!IMPORTANT]
 > Don't run the script as superuser (sudo) and make sure you have systemd installed
 
-Run the `install.sh`:
+Then, run the `install.sh`:
 
 ```bash
 run install.sh
 ```
 
-## Configure
+## Configuration
 
 The configuration file is at `~/.config/open-drpc.json`
 
