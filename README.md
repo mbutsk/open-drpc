@@ -4,8 +4,7 @@
 
 Python Script adding Discord RPC support to all Steam Games on Linux
 
-![изображение](https://github.com/user-attachments/assets/2caece22-8669-40e6-a92f-6a53a2b6f63f)
-
+![Screenshot](https://github.com/user-attachments/assets/2caece22-8669-40e6-a92f-6a53a2b6f63f)
 
 ## Installation
 
