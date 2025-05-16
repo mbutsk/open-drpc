@@ -3,6 +3,11 @@ import requests
 from pypresence import Presence
 from pypresence.exceptions import DiscordNotFound
 from time import sleep
+import platform
+
+if platform.system() != "Linux":
+    print("Sorry, but the script only works on Linux")
+    exit(1)
 
 RPC = Presence(1372662863755218944)
 
