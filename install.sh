@@ -7,7 +7,7 @@ if [ "$EUID" -eq 0 ]; then
 fi
 
 # Systemctl check
-if ! command -v systemd >/dev/null 2>&1; then
+if ! command -v systemctl >/dev/null 2>&1; then
     echo "Install systemd using your distribution's package manager."
     exit 1
 fi

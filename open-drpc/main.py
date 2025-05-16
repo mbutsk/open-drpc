@@ -39,11 +39,18 @@ def get_game():
             continue
     return None
 
+def rpc_gen(game: dict):
+    buttons = [{'label': "View on Steam", 'url': f"https://store.steampowered.com/app/{game['steam_appid']}"}]
+                
+    if game.get('website'):
+        buttons.append({'label': f"{game['name']} website", 'url': game['website']})
+
+    return {'details': game["name"], 'state': ', '.join(game['developers']), 'large_image': game['header_image'], 'large_text': game['name'],
+    'small_image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/2048px-Steam_icon_logo.svg.png',
+    'small_text': 'Using Open DRPC', 'buttons': buttons}
 
 def create(game: dict):
-    RPC.update(details=game["name"], state=', '.join(game['developers']), large_image=game['header_image'], large_text=game['name'],
-               small_image='https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/2048px-Steam_icon_logo.svg.png',
-               small_text='Using Open DRPC', buttons=[{'label': "View on Steam", 'url': f"https://store.steampowered.com/app/{game['steam_appid']}"}])
+    RPC.update(**rpc_gen(game))
     in_game()
 
 
