@@ -1,4 +1,4 @@
-# Open DRPC v1.2.0
+# Open DRPC v1.2.1
 
 [![pypresence](https://img.shields.io/badge/using-pypresence-00bb88.svg?style=for-the-badge&logo=discord&logoWidth=20)](https://github.com/qwertyquerty/pypresence)
 
@@ -30,3 +30,14 @@ The configuration file is at `~/.config/open-drpc.json`
 ### Excluded
 
 Add excluded app ids to `excluded` field
+
+## Uninstallation
+
+> [!IMPORTANT]
+> Don't run the script as superuser (sudo) and make sure you have systemd installed
+
+Then, run the `ubinstall.sh`:
+
+```bash
+run uninstall.sh
+```

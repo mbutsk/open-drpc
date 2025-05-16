@@ -1,7 +1,7 @@
 import psutil
 import requests
 from pypresence import Presence
-from pypresence.exceptions import DiscordNotFound
+from pypresence.exceptions import DiscordNotFound, PipeClosed
 from time import sleep
 import platform
 import pathlib
@@ -71,8 +71,11 @@ def rpc_gen(game: dict):
     'small_text': 'Using Open DRPC', 'buttons': buttons}
 
 def create(game: dict):
-    RPC.update(**rpc_gen(game))
-    in_game()
+    try:
+        RPC.update(**rpc_gen(game))
+        in_game()
+    except PipeClosed:
+        connect_rpc()
 
 
 def in_game():
