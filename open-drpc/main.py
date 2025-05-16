@@ -6,19 +6,19 @@ from time import sleep
 
 RPC = Presence(1372662863755218944)
 
+
 def connect_rpc():
     while True:
         try:
             RPC.connect()
-            print("connected")
-            break 
+            break
         except DiscordNotFound:
-            print("Wait for RPC connected...")
             sleep(5)
             connect_rpc()
 
+
 connect_rpc()
-print("sigmaboy")
+
 
 def game_data(app_id):
     response = requests.get(
@@ -39,11 +39,13 @@ def get_game():
             continue
     return None
 
+
 def create(game: dict):
     RPC.update(details=game["name"], state=', '.join(game['developers']), large_image=game['header_image'], large_text=game['name'],
                small_image='https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/2048px-Steam_icon_logo.svg.png',
                small_text='Using Open DRPC', buttons=[{'label': "View on Steam", 'url': f"https://store.steampowered.com/app/{game['steam_appid']}"}])
     in_game()
+
 
 def in_game():
     while True:
@@ -53,12 +55,14 @@ def in_game():
         else:
             sleep(15)
 
+
 def wait():
     while True:
         game = get_game()
         if game:
             create(game)
         sleep(15)
+
 
 if __name__ == "__main__":
     game = get_game()
