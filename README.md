@@ -36,7 +36,7 @@ Add excluded app ids to `excluded` field
 > [!IMPORTANT]
 > Don't run the script as superuser (sudo) and make sure you have systemd installed
 
-Then, run the `ubinstall.sh`:
+Then, run the `uninstall.sh`:
 
 ```bash
 run uninstall.sh
