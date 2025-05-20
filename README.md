@@ -1,4 +1,4 @@
-# Open DRPC v1.2.1
+# Open DRPC v1.3.0
 
 [![pypresence](https://img.shields.io/badge/using-pypresence-00bb88.svg?style=for-the-badge&logo=discord&logoWidth=20)](https://github.com/qwertyquerty/pypresence)
 
@@ -30,6 +30,19 @@ The configuration file is at `~/.config/open-drpc.json`
 ### Excluded
 
 Add excluded app ids to `excluded` field
+
+### Custom
+
+In the custom field, add dictionaries. The keys in them are Steam app ids. You can change the data for a specific game. For example:
+
+```json
+{
+"custom": {
+    "442070": {
+        "name": "Draw!!"
+    }
+}
+```
 
 ## Uninstallation
 

@@ -30,7 +30,7 @@ config_path = pathlib.Path("~/.config/open-drpc.json").expanduser()
 
 if not config_path.exists():
     with config_path.open('w') as fp:
-        config = {'excluded': []}
+        config = {'excluded': [], 'custom': {}}
         json.dump(config, fp)
 else:
     with config_path.open('r+') as fp:
@@ -38,13 +38,21 @@ else:
             config = json.load(fp)
             config['excluded'] = [str(i) for i in config['excluded']]
         except json.JSONDecodeError:
-            config = {'excluded': []}
+            config = {'excluded': [], 'custom': {}}
             json.dump(config, fp)
 
 def game_data(app_id):
+    app_id = str(app_id)
     response = requests.get(
         "https://store.steampowered.com/api/appdetails", {"appids": app_id})
-    data = response.json()[str(app_id)]["data"]
+    data = response.json()[app_id]["data"]
+
+    if config['custom'].get(app_id):
+        for k, v in config['custom'][app_id].items():
+            if k == "image":
+                data["header_image"] = v
+            else:
+                data[k] = v
 
     return data
 
