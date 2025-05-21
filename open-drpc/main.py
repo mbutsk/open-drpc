@@ -69,6 +69,9 @@ def game_data(app_id, custom=True):
         if app_id in ids:
             return mod.game_data(data)
 
+    if not data.get('description'):
+        data['description'] = [' '.join(data['developers'])]
+
     return data
 
 
@@ -89,7 +92,7 @@ def rpc_gen(game: dict):
     if game.get('website'):
         buttons.append({'label': f"{game['name']} website", 'url': game['website']})
 
-    return {'details': game["name"], 'state': ', '.join(game['developers']), 'large_image': game['header_image'], 'large_text': game['name'],
+    return {'details': game["name"], 'state': game['description'], 'large_image': game['header_image'], 'large_text': game['name'],
     'small_image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/2048px-Steam_icon_logo.svg.png',
     'small_text': 'Using Open DRPC', 'buttons': buttons}
 
