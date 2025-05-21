@@ -2,10 +2,12 @@ import psutil
 import requests
 from pypresence import Presence
 from pypresence.exceptions import DiscordNotFound, PipeClosed
-from time import sleep
+from time import sleep, time
 import platform
 import pathlib
 import json
+import importlib
+import sys
 
 if platform.system() != "Linux":
     print("Sorry, but the script only works on Linux")
@@ -13,6 +15,7 @@ if platform.system() != "Linux":
 
 RPC = Presence(1372662863755218944)
 
+mods = {}
 
 def connect_rpc():
     while True:
@@ -30,7 +33,7 @@ config_path = pathlib.Path("~/.config/open-drpc.json").expanduser()
 
 if not config_path.exists():
     with config_path.open('w') as fp:
-        config = {'excluded': [], 'custom': {}}
+        config = {'excluded': [], 'custom': {}, 'mods': []}
         json.dump(config, fp)
 else:
     with config_path.open('r+') as fp:
@@ -38,10 +41,18 @@ else:
             config = json.load(fp)
             config['excluded'] = [str(i) for i in config['excluded']]
         except json.JSONDecodeError:
-            config = {'excluded': [], 'custom': {}}
+            config = {'excluded': [], 'custom': {}, 'mods': []}
             json.dump(config, fp)
 
-def game_data(app_id):
+sys.path.append(str(pathlib.Path(__file__).parent.parent))
+for mod in config['mods']:
+    try:
+        module = importlib.import_module(f"mods.{mod}.main")
+        mods.update({module: [str(i) for i in module.setup()]})
+    except ModuleNotFoundError:
+        pass
+
+def game_data(app_id, custom=True):
     app_id = str(app_id)
     response = requests.get(
         "https://store.steampowered.com/api/appdetails", {"appids": app_id})
@@ -53,6 +64,10 @@ def game_data(app_id):
                 data["header_image"] = v
             else:
                 data[k] = v
+
+    for mod, ids in mods.items():
+        if app_id in ids:
+            return mod.game_data(data)
 
     return data
 
@@ -87,11 +102,13 @@ def create(game: dict):
 
 
 def in_game():
+    tm = time()
     while True:
-        if not get_game():
+        if not game:
             RPC.clear()
             wait()
         else:
+            RPC.update(start=tm, **rpc_gen(game))
             sleep(15)
 
 
