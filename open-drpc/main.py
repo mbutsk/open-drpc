@@ -104,6 +104,7 @@ def create(game: dict):
 def in_game():
     tm = time()
     while True:
+        game = get_game()
         if not game:
             RPC.clear()
             wait()
@@ -114,10 +115,10 @@ def in_game():
 
 def wait():
     while True:
+        sleep(15)
         game = get_game()
         if game:
             create(game)
-        sleep(15)
 
 
 if __name__ == "__main__":
