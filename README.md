@@ -1,4 +1,4 @@
-# Open DRPC v1.4.1
+# Open DRPC v1.5.0
 
 [![pypresence](https://img.shields.io/badge/using-pypresence-00bb88.svg?style=for-the-badge&logo=discord&logoWidth=20)](https://github.com/qwertyquerty/pypresence)
 
@@ -80,6 +80,14 @@ Add the mods you have installed to the `mods` list in `~/.config/open-drpc.json`
 
 ### Mod creation
 
+Please use this badge in your mod repository README file:
+
+[![open-drpc mod](https://img.shields.io/badge/OPEN%20DRPC-MOD-blue?style=for-the-badge&logo=discord&logoColor=white)](https://github.com/mbutsk/open-drpc)
+
+```markdown
+[![open-drpc mod](https://img.shields.io/badge/OPEN%20DRPC-MOD-blue?style=for-the-badge&logo=discord&logoColor=white)](https://github.com/mbutsk/open-drpc)
+```
+
 In the mod folder (`open-drpc/mods/mod-name`), create a `main.py` file. It must contain two functions: `setup` and `game_data`
 
 #### `setup`
@@ -94,22 +102,10 @@ This function must accept an argument - a `dict` with the game data received fro
 
 It should return the same object with updated information of the game, like the name or links.
 
-You can also change the `header_image` and `description` in the object to change the image and description of the RPC respectively.
-
-### Trusted mod requirements
-
-Your repo name should start with "open-drpc-".
-
-Also, please use this badge in your repository README file:
-
-[![open-drpc mod](https://img.shields.io/badge/OPEN%20DRPC-MOD-blue?style=for-the-badge&logo=discord&logoColor=white)](https://github.com/mbutsk/open-drpc)
-
-```markdown
-[![open-drpc mod](https://img.shields.io/badge/OPEN%20DRPC-MOD-blue?style=for-the-badge&logo=discord&logoColor=white)](https://github.com/mbutsk/open-drpc)
-```
+You can also change the `image` and `description` in the object to change the image and description of the RPC respectively.
 
 ## Trusted mods
 
-You can request the addition of your mod to the Trusted mods list by submitting a new [issue](https://github.com/mbutsk/open-drpc/issues/new?labels=Mod)
+You can request the addition of your mod to the Trusted mods list by submitting a new [issue](https://github.com/mbutsk/open-drpc/issues/new?labels=Mod). Your repo name must start with `open-drpc-`
 
 [Undertale mod](https://github.com/mbutsk/open-drpc-undertale)
