@@ -59,9 +59,6 @@ def game_data(app_id):
 
     if config['custom'].get(app_id):
         for k, v in config['custom'][app_id].items():
-            if k == "image":
-                data["header_image"] = v
-            else:
                 data[k] = v
 
     for mod, ids in mods.items():
@@ -91,7 +88,10 @@ def rpc_gen(game: dict):
     if game.get('website'):
         buttons.append({'label': f"{game['name']} website", 'url': game['website']})
 
-    return {'details': game["name"], 'state': game['description'], 'large_image': game['header_image'], 'large_text': game['name'],
+    if not game.get('image'):
+        game['image'] = game['header_image']
+
+    return {'details': game["name"], 'state': game['description'], 'large_image': game['image'], 'large_text': game['name'],
     'small_image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/2048px-Steam_icon_logo.svg.png',
     'small_text': 'Using Open DRPC', 'buttons': buttons}
 
