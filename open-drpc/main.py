@@ -8,6 +8,7 @@ import pathlib
 import json
 import importlib
 import sys
+import logging
 
 if platform.system() != "Linux":
     print("Sorry, but the script only works on Linux")
@@ -18,15 +19,17 @@ RPC = Presence(1372662863755218944)
 mods = {}
 
 def connect_rpc():
+    logging.debug("Connecting RPC...")
     while True:
         try:
             RPC.connect()
+            logging.debug("RPC connected!")
             break
         except DiscordNotFound:
             sleep(5)
             connect_rpc()
 
-
+logging.basicConfig(level=logging.DEBUG)
 connect_rpc()
 
 config_path = pathlib.Path("~/.config/open-drpc.json").expanduser()
@@ -52,7 +55,7 @@ for mod in config['mods']:
     except ModuleNotFoundError:
         pass
 
-def game_data(app_id, custom=True):
+def game_data(app_id):
     app_id = str(app_id)
     response = requests.get(
         "https://store.steampowered.com/api/appdetails", {"appids": app_id})
@@ -70,12 +73,13 @@ def game_data(app_id, custom=True):
             return mod.game_data(data)
 
     if not data.get('description'):
-        data['description'] = [' '.join(data['developers'])]
+        data['description'] = ' '.join(data['developers'])
 
     return data
 
 
 def get_game():
+    logging.debug("Getting game info...")
     for proc in psutil.process_iter(["environ"]):
         try:
             environ = proc.info["environ"]
@@ -99,6 +103,7 @@ def rpc_gen(game: dict):
 def create(game: dict):
     try:
         RPC.update(**rpc_gen(game))
+        logging.debug("RPC Created")
         in_game()
     except PipeClosed:
         connect_rpc()
