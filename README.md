@@ -2,7 +2,7 @@
 
 [![pypresence](https://img.shields.io/badge/using-pypresence-00bb88.svg?style=for-the-badge&logo=discord&logoWidth=20)](https://github.com/qwertyquerty/pypresence)
 
-Python Script adding Discord RPC support to all Steam Games on Linux
+Python Script for adding Discord Rich Presence support to all Steam Games on Linux
 
 ![Screenshot](https://github.com/user-attachments/assets/2caece22-8669-40e6-a92f-6a53a2b6f63f)
 
@@ -17,7 +17,7 @@ git clone https://github.com/mbutsk/open-drpc
 > [!IMPORTANT]
 > Don't run the script as superuser (sudo) and make sure you have systemd installed
 
-Then, run the `install.sh`:
+Then, run `install.sh`:
 
 ```bash
 run install.sh
@@ -25,16 +25,21 @@ run install.sh
 
 ## Configuration
 
-The configuration file is at `~/.config/open-drpc.json`
+The configuration file is located at `~/.config/open-drpc.json`
 
 ### Excluded
 
-Add excluded app ids to `excluded` list
+You can add excluded app IDs to the `excluded` list.
+
+Excluded games will not show up on your profile.
 
 ### Custom
 
-In the custom field, add dictionaries. The keys in them are Steam app ids. You can change the data for a specific game. For example:
-You can also change the game description. By default, this is the developer list
+To change any game's data to your own, you can add entries to the `custom` object with app IDs as keys and replacement data as values.
+
+You can change the `name`, `description`, or the `image` (to a URL to any image).
+
+For example:
 
 ```json
 {
@@ -46,48 +51,56 @@ You can also change the game description. By default, this is the developer list
 }
 ```
 
+Note that by default the description of a game will appear as the list of its developers.
+
 ### Mods
 
-Add mods names to `mods` list. Detailed in [Modding](https://github.com/mbutsk/open-drpc/blob/main/README.md#modding)
+You can add mod names to the `mods` list. Read more in [Modding](https://github.com/mbutsk/open-drpc/blob/main/README.md#modding)
 
 ## Uninstallation
 
-> [!IMPORTANT]
-> Don't run the script as superuser (sudo) and make sure you have systemd installed
-
-Then, run the `uninstall.sh`:
+To uninstall, run `uninstall.sh`:
 
 ```bash
 run uninstall.sh
 ```
 
+> [!IMPORTANT]
+> Don't run the script as superuser (sudo) and make sure you have systemd installed
+
 ### Modding
 
-### Mods installation
+### Mod installation
 
-In the folder with open-drpc installed, create a `mods` folder. You can clone folders with mods into it. Mod name = folder name
+In a folder with open-drpc installed, create a `mods` folder. You can put mod folders into it.
 
-Then add mod name to `mods` list in `~/.config/open-drpc.json`
+The mod name is the name of the mod folder.
 
-### Create mod
+Add the mods you have installed to the `mods` list in `~/.config/open-drpc.json` to enable them.
 
-In the mod folder (open-drpc/mods/mod-name), create a main.py file. It must contain two functions: `setup` and `game_data`
+### Mod creation
+
+In the mod folder (`open-drpc/mods/mod-name`), create a `main.py` file. It must contain two functions: `setup` and `game_data`
 
 #### `setup`
 
-Actions performed when importing the module. Should return a list of Steam app ids, upon receipt of which the `game_data` function will be called.
+In here you may put any actions that will be performed when importing the module.
 
-### `game_data`
+It should return a list of Steam app IDs, upon receiving which open-drpc will call the `game_data` function.
 
-Argument: `game: dict` (Dictionary with game data received from Steam Web API by game id)
+#### `game_data`
 
-The function should return updated information about the game. You can also use `header_image` as the main image in RPC and `description` as state in RPC
+This function must accept an argument - a `dict` with the game data received from Steam Web API
 
-### Requirements
+It should return the same object with updated information of the game, like the name or links.
 
-Your repo name should start with "open-drpc-"
+You can also change the `header_image` and `description` in the object to change the image and description of the RPC respectively.
 
-Please use this badge in your repository README file
+### Trusted mod requirements
+
+Your repo name should start with "open-drpc-".
+
+Also, please use this badge in your repository README file:
 
 [![open-drpc mod](https://img.shields.io/badge/OPEN%20DRPC-MOD-blue?style=for-the-badge&logo=discord&logoColor=white)](https://github.com/mbutsk/open-drpc)
 
@@ -97,6 +110,6 @@ Please use this badge in your repository README file
 
 ## Trusted mods
 
-You can add your mod to Trusted mod by [Issue](https://github.com/mbutsk/open-drpc/issues/new?labels=Mod)
+You can request the addition of your mod to the Trusted mods list by submitting a new [issue](https://github.com/mbutsk/open-drpc/issues/new?labels=Mod)
 
 [Undertale mod](https://github.com/mbutsk/open-drpc-undertale)
