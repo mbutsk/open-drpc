@@ -73,7 +73,7 @@ def game_data(app_id):
             return mod.game_data(data)
 
     if not data.get('description'):
-        data['description'] = ' '.join(data['developers'])
+        data['description'] = 'by' + ', '.join(data['developers'])
 
     return data
 
