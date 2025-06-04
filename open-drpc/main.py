@@ -8,7 +8,6 @@ import pathlib
 import json
 import importlib
 import sys
-import logging
 
 if platform.system() != "Linux":
     print("Sorry, but the script only works on Linux")
@@ -19,17 +18,14 @@ RPC = Presence(1372662863755218944)
 mods = {}
 
 def connect_rpc():
-    logging.debug("Connecting RPC...")
     while True:
         try:
             RPC.connect()
-            logging.debug("RPC connected!")
             break
         except DiscordNotFound:
             sleep(5)
             connect_rpc()
 
-logging.basicConfig(level=logging.DEBUG)
 connect_rpc()
 
 config_path = pathlib.Path("~/.config/open-drpc.json").expanduser()
@@ -73,13 +69,12 @@ def game_data(app_id):
             return mod.game_data(data)
 
     if not data.get('description'):
-        data['description'] = 'by' + ', '.join(data['developers'])
+        data['description'] = 'by ' + ', '.join(data['developers'])
 
     return data
 
 
 def get_game():
-    logging.debug("Getting game info...")
     for proc in psutil.process_iter(["environ"]):
         try:
             environ = proc.info["environ"]
@@ -103,7 +98,6 @@ def rpc_gen(game: dict):
 def create(game: dict):
     try:
         RPC.update(**rpc_gen(game))
-        logging.debug("RPC Created")
         in_game()
     except PipeClosed:
         connect_rpc()
