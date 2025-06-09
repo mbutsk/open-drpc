@@ -15,8 +15,6 @@ if platform.system() != "Linux":
 
 RPC = Presence(1372662863755218944)
 
-mods = {}
-
 
 def connect_rpc():
     while True:
@@ -28,30 +26,35 @@ def connect_rpc():
             connect_rpc()
 
 
-connect_rpc()
-
-config_path = pathlib.Path("~/.config/open-drpc.json").expanduser()
-
-if not config_path.exists():
-    with config_path.open('w') as fp:
-        config = {'excluded': [], 'custom': {}, 'mods': []}
-        json.dump(config, fp)
-else:
-    with config_path.open('r+') as fp:
-        try:
-            config = json.load(fp)
-            config['excluded'] = [str(i) for i in config['excluded']]
-        except json.JSONDecodeError:
+def load_config(config_path: pathlib.Path):
+    if not config_path.exists():
+        with config_path.open('w') as fp:
             config = {'excluded': [], 'custom': {}, 'mods': []}
             json.dump(config, fp)
+    else:
+        with config_path.open('r+') as fp:
+            try:
+                config = json.load(fp)
+                config['excluded'] = [str(i) for i in config['excluded']]
+            except json.JSONDecodeError:
+                config = {'excluded': [], 'custom': {}, 'mods': []}
+                json.dump(config, fp)
 
-sys.path.append(str(pathlib.Path(__file__).parent.parent))
-for mod in config['mods']:
-    try:
-        module = importlib.import_module(f"mods.{mod}.main")
-        mods.update({module: [str(i) for i in module.setup()]})
-    except ModuleNotFoundError:
-        pass
+    return config
+
+
+def load_mods():
+    mods = {}
+
+    sys.path.append(str(pathlib.Path(__file__).parent.parent))
+    for mod in config['mods']:
+        try:
+            module = importlib.import_module(f"mods.{mod}.main")
+            mods.update({module: [str(i) for i in module.setup()]})
+        except ModuleNotFoundError:
+            pass
+
+    return mods
 
 
 def game_data(app_id):
@@ -66,7 +69,7 @@ def game_data(app_id):
 
     for mod, ids in mods.items():
         if app_id in ids:
-            return mod.game_data(data)
+            data = mod.game_data(data)
 
     if not data.get('description'):
         data['description'] = 'by ' + ', '.join(data['developers'])
@@ -131,6 +134,13 @@ def wait():
 
 
 if __name__ == "__main__":
+    config_path = pathlib.Path("~/.config/open-drpc.json").expanduser()
+
+    config = load_config(config_path)
+    mods = load_mods()
+
+    connect_rpc()
+
     game = get_game()
     if game:
         create(game)
