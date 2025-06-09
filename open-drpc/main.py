@@ -17,6 +17,7 @@ RPC = Presence(1372662863755218944)
 
 mods = {}
 
+
 def connect_rpc():
     while True:
         try:
@@ -25,6 +26,7 @@ def connect_rpc():
         except DiscordNotFound:
             sleep(5)
             connect_rpc()
+
 
 connect_rpc()
 
@@ -51,6 +53,7 @@ for mod in config['mods']:
     except ModuleNotFoundError:
         pass
 
+
 def game_data(app_id):
     app_id = str(app_id)
     response = requests.get(
@@ -59,7 +62,7 @@ def game_data(app_id):
 
     if config['custom'].get(app_id):
         for k, v in config['custom'][app_id].items():
-                data[k] = v
+            data[k] = v
 
     for mod, ids in mods.items():
         if app_id in ids:
@@ -82,18 +85,22 @@ def get_game():
             continue
     return None
 
+
 def rpc_gen(game: dict):
-    buttons = [{'label': "View on Steam", 'url': f"https://store.steampowered.com/app/{game['steam_appid']}"}]
-                
+    buttons = [{'label': "View on Steam",
+                'url': f"https://store.steampowered.com/app/{game['steam_appid']}"}]
+
     if game.get('website'):
-        buttons.append({'label': f"{game['name']} website", 'url': game['website']})
+        buttons.append(
+            {'label': f"{game['name']} website", 'url': game['website']})
 
     if not game.get('image'):
         game['image'] = game['header_image']
 
     return {'details': game["name"], 'state': game['description'], 'large_image': game['image'], 'large_text': game['name'],
-    'small_image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/2048px-Steam_icon_logo.svg.png',
-    'small_text': 'Using Open DRPC', 'buttons': buttons}
+            'small_image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/2048px-Steam_icon_logo.svg.png',
+            'small_text': 'Using Open DRPC', 'buttons': buttons}
+
 
 def create(game: dict):
     try:
