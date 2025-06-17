@@ -20,7 +20,7 @@ git clone https://github.com/mbutsk/open-drpc
 Then, run `install.sh`:
 
 ```bash
-run install.sh
+./install.sh
 ```
 
 ## Configuration
