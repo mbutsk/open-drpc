@@ -20,7 +20,7 @@ git clone https://github.com/mbutsk/open-drpc
 Then, run `install.sh`:
 
 ```bash
-run install.sh
+./install.sh
 ```
 
 ## Configuration
@@ -62,7 +62,7 @@ You can add mod names to the `mods` list. Read more in [Modding](https://github.
 To uninstall, run `uninstall.sh`:
 
 ```bash
-run uninstall.sh
+./uninstall.sh
 ```
 
 > [!IMPORTANT]
