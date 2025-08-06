@@ -14,7 +14,7 @@ fi
 
 # Variables
 SERVICE_NAME="open-drpc"
-SCRIPT_PATH="$(pwd)"
+SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SYSTEMD_SERVICE_PATH="$HOME/.config/systemd/user/$SERVICE_NAME.service"
 SHARE_PATH="/usr/share/open-drpc"
 
