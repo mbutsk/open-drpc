@@ -10,7 +10,7 @@ Python Script for adding Discord Rich Presence support to all Steam Games on Lin
 
 First, clone the repo:
 
-```bash
+```shell
 git clone https://github.com/mbutsk/open-drpc
 ```
 
@@ -19,8 +19,27 @@ git clone https://github.com/mbutsk/open-drpc
 
 Then, run `install.sh`:
 
-```bash
+```shell
 ./install.sh
+```
+
+## Uninstallation
+
+To uninstall, run `uninstall.sh`:
+
+```shell
+./uninstall.sh
+```
+
+> [!IMPORTANT]
+> Don't run the script as superuser (sudo) and make sure you have systemd installed
+
+## Restarting
+
+You can restart open-drpc for reload mods / config by runing:
+
+```shell
+systemctl --user restart "open-drpc"
 ```
 
 ## Configuration
@@ -56,17 +75,6 @@ Note that by default the description of a game will appear as the list of its de
 ### Mods
 
 You can add mod names to the `mods` list. Read more in [Modding](https://github.com/mbutsk/open-drpc/blob/main/README.md#modding)
-
-## Uninstallation
-
-To uninstall, run `uninstall.sh`:
-
-```bash
-./uninstall.sh
-```
-
-> [!IMPORTANT]
-> Don't run the script as superuser (sudo) and make sure you have systemd installed
 
 ### Modding
 
