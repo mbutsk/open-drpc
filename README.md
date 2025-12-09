@@ -2,7 +2,7 @@
 
 [![pypresence](https://img.shields.io/badge/using-pypresence-00bb88.svg?style=for-the-badge&logo=discord&logoWidth=20)](https://github.com/qwertyquerty/pypresence)
 
-Python Script for adding Discord Rich Presence support to all Steam Games on Linux
+Python Script for adding Discord Rich Presence support to all Steam Games on Linux and MacOS
 
 ![Screenshot](https://github.com/user-attachments/assets/2caece22-8669-40e6-a92f-6a53a2b6f63f)
 
@@ -15,36 +15,41 @@ git clone https://github.com/mbutsk/open-drpc
 ```
 
 > [!IMPORTANT]
-> Don't run the script as superuser (sudo) and make sure you have systemd installed
+> Don't run the script as superuser (sudo)
+>
+> For Linux make sure you have systemd installed
 
-Then, run `install.sh`:
-
-```shell
-./install.sh
-```
+Then, run `install-linux.sh` or `install-macos.sh`
 
 ## Uninstallation
 
-To uninstall, run `uninstall.sh`:
-
-```shell
-./uninstall.sh
-```
-
 > [!IMPORTANT]
-> Don't run the script as superuser (sudo) and make sure you have systemd installed
+> Don't run the script as superuser (sudo)
+>
+> For Linux make sure you have systemd installed
+
+To uninstall, run `install-linux.sh` or `install-macos.sh`
 
 ## Restarting
 
-You can restart open-drpc for reload mods / config by runing:
+You can restart open-drpc for reload mods / config
+
+### Linux
 
 ```shell
 systemctl --user restart "open-drpc"
 ```
 
+### MacOS
+
+```shell
+launchctl stop "open-drpc"
+launchctl start "open-drpc"
+```
+
 ## Configuration
 
-The configuration file is located at `~/.config/open-drpc.json`
+The configuration file is located at `~/.config/open-drpc.json` on Linux and at `~/Library/Application Support/open-drpc/config.json` on MacOS
 
 ### Excluded
 
@@ -84,7 +89,7 @@ In a folder with open-drpc installed, create a `mods` folder. You can put mod fo
 
 The mod name is the name of the mod folder.
 
-Add the mods you have installed to the `mods` list in `~/.config/open-drpc.json` to enable them.
+Add the mods you have installed to the `mods` list in config to enable them.
 
 ### Mod creation
 
@@ -102,13 +107,13 @@ In the mod folder (`open-drpc/mods/mod-name`), create a `main.py` file. It must 
 
 In here you may put any actions that will be performed when importing the module.
 
-It should return a list of Steam app IDs, upon receiving which open-drpc will call the `game_data` function.
+It must return a list of Steam app IDs, upon receiving which open-drpc will call the `game_data` function.
 
 #### `game_data`
 
 This function must accept an argument - a `dict` with the game data received from Steam Web API
 
-It should return the same object with updated information of the game, like the name or links.
+It must return the same object with updated information of the game, like the name or links.
 
 You can also change the `image` and `description` in the object to change the image and description of the RPC respectively.
 

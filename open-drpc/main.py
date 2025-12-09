@@ -8,9 +8,12 @@ import pathlib
 import json
 import importlib
 import sys
+import os
 
-if platform.system() != "Linux":
-    print("Sorry, but the script only works on Linux")
+system = platform.system()
+
+if system.lower() not in ["linux", "darwin"]:
+    print(f"Sorry, but your system ({system}) is not supported")
     exit(1)
 
 RPC = Presence(1372662863755218944)
@@ -134,7 +137,11 @@ def wait():
 
 
 if __name__ == "__main__":
-    config_path = pathlib.Path("~/.config/open-drpc.json").expanduser()
+    if system.lower() == "linux":
+        config_path = pathlib.Path("~/.config/open-drpc.json").expanduser()
+    elif system.lower() == "darwin":
+        config_path = pathlib.Path("~/Library/Application Support/open-drpc/config.json").expanduser()
+    os.makedirs(config_path.parent, exist_ok=True)
 
     config = load_config(config_path)
     mods = load_mods()
