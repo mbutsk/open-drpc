@@ -1,14 +1,15 @@
+import importlib
+import json
+import os
+import pathlib
+import platform
+import sys
+from time import sleep, time
+
 import psutil
 import requests
 from pypresence import Presence
 from pypresence.exceptions import DiscordNotFound, PipeClosed
-from time import sleep, time
-import platform
-import pathlib
-import json
-import importlib
-import sys
-import os
 
 system = platform.system()
 
@@ -31,16 +32,16 @@ def connect_rpc():
 
 def load_config(config_path: pathlib.Path):
     if not config_path.exists():
-        with config_path.open('w') as fp:
-            config = {'excluded': [], 'custom': {}, 'mods': []}
+        with config_path.open("w") as fp:
+            config = {"excluded": [], "custom": {}, "mods": []}
             json.dump(config, fp)
     else:
-        with config_path.open('r+') as fp:
+        with config_path.open("r+") as fp:
             try:
                 config = json.load(fp)
-                config['excluded'] = [str(i) for i in config['excluded']]
+                config["excluded"] = [str(i) for i in config["excluded"]]
             except json.JSONDecodeError:
-                config = {'excluded': [], 'custom': {}, 'mods': []}
+                config = {"excluded": [], "custom": {}, "mods": []}
                 json.dump(config, fp)
 
     return config
@@ -50,7 +51,7 @@ def load_mods():
     mods = {}
 
     sys.path.append(str(pathlib.Path(__file__).parent.parent))
-    for mod in config['mods']:
+    for mod in config["mods"]:
         try:
             module = importlib.import_module(f"mods.{mod}.main")
             mods.update({module: [str(i) for i in module.setup()]})
@@ -63,19 +64,20 @@ def load_mods():
 def game_data(app_id):
     app_id = str(app_id)
     response = requests.get(
-        "https://store.steampowered.com/api/appdetails", {"appids": app_id})
+        "https://store.steampowered.com/api/appdetails", {"appids": app_id}
+    )
     data = response.json()[app_id]["data"]
 
-    if config['custom'].get(app_id):
-        for k, v in config['custom'][app_id].items():
+    if config["custom"].get(app_id):
+        for k, v in config["custom"][app_id].items():
             data[k] = v
 
     for mod, ids in mods.items():
         if app_id in ids:
             data = mod.game_data(data)
 
-    if not data.get('description'):
-        data['description'] = 'by ' + ', '.join(data['developers'])
+    if not data.get("description"):
+        data["description"] = "by " + ", ".join(data["developers"])
 
     return data
 
@@ -84,28 +86,42 @@ def get_game():
     for proc in psutil.process_iter(["environ"]):
         try:
             environ = proc.info["environ"]
-            if environ is not None:
-                if "SteamAppId" in environ and environ["SteamAppId"] not in config['excluded']:
-                    return game_data(environ["SteamAppId"])
+            if (
+                environ is not None
+                and "SteamAppId" in environ
+                and environ["SteamAppId"] not in config["excluded"]
+            ):
+                return game_data(environ["SteamAppId"])
         except (psutil.AccessDenied, psutil.NoSuchProcess, KeyError):
             continue
     return None
 
 
 def rpc_gen(game: dict):
-    buttons = [{'label': "View on Steam",
-                'url': f"https://store.steampowered.com/app/{game['steam_appid']}"}]
+    buttons = [
+        {
+            "label": "View on Steam",
+            "url": f"https://store.steampowered.com/app/{game['steam_appid']}",
+        }
+    ]
 
-    if game.get('website'):
+    if game.get("website"):
         buttons.append(
-            {'label': f"{game['name']} website", 'url': game['website']})
+            {"label": f"{game['name']} website", "url": game["website"]}
+        )
 
-    if not game.get('image'):
-        game['image'] = game['header_image']
+    if not game.get("image"):
+        game["image"] = game["header_image"]
 
-    return {'details': game["name"], 'state': game['description'], 'large_image': game['image'], 'large_text': game['name'],
-            'small_image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/2048px-Steam_icon_logo.svg.png',
-            'small_text': 'Using Open DRPC', 'buttons': buttons}
+    return {
+        "details": game["name"],
+        "state": game["description"],
+        "large_image": game["image"],
+        "large_text": game["name"],
+        "small_image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/2048px-Steam_icon_logo.svg.png",
+        "small_text": "Using Open DRPC",
+        "buttons": buttons,
+    }
 
 
 def create(game: dict):
@@ -140,7 +156,9 @@ if __name__ == "__main__":
     if system.lower() == "linux":
         config_path = pathlib.Path("~/.config/open-drpc.json").expanduser()
     elif system.lower() == "darwin":
-        config_path = pathlib.Path("~/Library/Application Support/open-drpc/config.json").expanduser()
+        config_path = pathlib.Path(
+            "~/Library/Application Support/open-drpc/config.json"
+        ).expanduser()
     os.makedirs(config_path.parent, exist_ok=True)
 
     config = load_config(config_path)
