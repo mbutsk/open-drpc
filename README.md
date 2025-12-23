@@ -44,7 +44,6 @@ systemctl --user restart "open-drpc"
 
 ```shell
 launchctl stop "open-drpc"
-launchctl start "open-drpc"
 ```
 
 ## Configuration
